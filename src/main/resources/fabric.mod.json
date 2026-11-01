@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "wardenmic",
+  "version": "${version}",
+  "name": "Warden Mic",
+  "description": "El Warden te escucha a través de tu micrófono real.",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.wardenmic.WardenMic"],
+    "client": ["com.wardenmic.client.WardenMicClient"]
+  },
+  "mixins": ["wardenmic.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

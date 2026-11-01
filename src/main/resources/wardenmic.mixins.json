@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.wardenmic.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "WardenTargetMixin",
+    "WardenVibrationMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
