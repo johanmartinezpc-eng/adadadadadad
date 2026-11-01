@@ -1,0 +1,30 @@
+name: Compilar mod
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: current
+
+      - name: Compilar
+        working-directory: warden-mic   # <-- nombre de su carpeta
+        run: gradle build
+
+      - name: Subir el .jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: warden-mic-jar
+          path: warden-mic/build/libs/*.jar   # <-- nombre de su carpeta
