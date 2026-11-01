@@ -28,6 +28,7 @@ public class WardenMicClient implements ClientModInitializer {
     private static final int LINE_COLOR = 0x5555CCFF; // línea central tenue
     private static final int BAR_WARN   = 0xFFFFAA00; // barra normal (ámbar)
     private static final int BAR_CHASE  = 0xFFFF3333; // barra en persecución (rojo)
+    private static final int BAR_OVER   = 0xFF7A0000; // barra oscura que se sobrepone (rojo oscuro)
     private static final int MARKER     = 0xFFFFFFFF; // raya del 8/10
 
     private static final MicCapture MIC = new MicCapture();
@@ -76,7 +77,7 @@ public class WardenMicClient implements ClientModInitializer {
             }
 
             // ---------- Barra de alerta (arriba al centro) ----------
-            float a = Math.max(0f, Math.min(1f, alert));
+            float a = Math.max(0f, Math.min(WardenMic.MAX_ALERT, alert));
             if (a > 0.005f || chasing) {
                 int bw = 182;
                 int bh = 7;
@@ -84,9 +85,18 @@ public class WardenMicClient implements ClientModInitializer {
                 int barY = 14;
 
                 g.fill(barX - 2, barY - 2, barX + bw + 2, barY + bh + 2, PANEL_BG);
-                int fillW = Math.round(bw * a);
+
+                // Primera barra (0 a 1)
+                int fillW = Math.round(bw * Math.min(1f, a));
                 if (fillW > 0) {
                     g.fill(barX, barY, barX + fillW, barY + bh, chasing ? BAR_CHASE : BAR_WARN);
+                }
+                // Segunda barra, más oscura, que se sobrepone a la primera (1 a 2)
+                if (a > 1f) {
+                    int overW = Math.round(bw * (a - 1f));
+                    if (overW > 0) {
+                        g.fill(barX, barY, barX + overW, barY + bh, BAR_OVER);
+                    }
                 }
                 // Raya indicadora en el 8/10
                 int mx = barX + Math.round(bw * WardenMic.CHASE_START);
