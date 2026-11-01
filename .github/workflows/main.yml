@@ -20,11 +20,10 @@ jobs:
           gradle-version: current
 
       - name: Compilar
-        working-directory: warden-mic   # <-- nombre de su carpeta
         run: gradle build
 
       - name: Subir el .jar
         uses: actions/upload-artifact@v4
         with:
           name: warden-mic-jar
-          path: warden-mic/build/libs/*.jar   # <-- nombre de su carpeta
+          path: build/libs/*.jar
