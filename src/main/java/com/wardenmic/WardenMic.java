@@ -59,6 +59,14 @@ public class WardenMic implements ModInitializer {
     /** Alcance (bloques) para persecución. */
     public static final double CHASE_RANGE = 64.0;
 
+    /**
+     * En el juego normal el Warden se entierra si pasan ~60 s sin perturbaciones.
+     * Como este mod le quita vibraciones, olfato, etc., se enterraría siempre.
+     * Con true, se renueva ese temporizador y el Warden se queda donde está.
+     */
+    public static final boolean WARDENS_NEVER_DIG = true;
+    public static final double KEEP_AWAKE_RANGE = 128.0;
+
     private static final Identifier SPEED_ID = Identifier.fromNamespaceAndPath("wardenmic", "chase_speed");
 
     private static class State {
@@ -175,6 +183,15 @@ public class WardenMic implements ModInitializer {
                         Warden.class, player.getBoundingBox().inflate(CHASE_RANGE))) {
                     warden.increaseAngerAt(player, 40, false);
                     setSpeedBoost(warden, overfill * SPEED_BOOST_MAX);
+                }
+            }
+
+            // Evita que el Warden se entierre y desaparezca
+            if (WARDENS_NEVER_DIG && serverTicks % 20 == 0) {
+                ServerLevel world = (ServerLevel) player.level();
+                for (Warden warden : world.getEntitiesOfClass(
+                        Warden.class, player.getBoundingBox().inflate(KEEP_AWAKE_RANGE))) {
+                    WardenAi.setDigCooldown(warden);
                 }
             }
 
